@@ -12,7 +12,9 @@ odb = openOdb(path=odbName)
 pnt = int(getInput('The investigated point :'))
 steps = int(getInput('Amount of steps'))
 F1=int(getInput('N of the 1st frame:'))
-Fn=int(getInput('N of the last frame:'))
+Fn=[]
+for j in range (steps):
+   Fn.append(int(getInput('N of the last frame for Step-'+str(j+1))))
 through = int(getInput('Frequency:'))
 FName = str(getInput('the Name of calculation:'))+'.dat'
 
@@ -29,7 +31,7 @@ begin_time = time.time()
 
 for j in range (steps):
    TheFrames = odb.steps['Step-'+str(j+1)].frames
-   for i in range (F1,Fn,through):
+   for i in range (F1,Fn[j],through):
 
       start_time = time.time()
 
