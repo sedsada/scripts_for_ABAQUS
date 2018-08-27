@@ -2,7 +2,6 @@ from abaqusConstants import *
 from odbAccess import *
 import math
 import numpy
-import multiprocessing
 from multiprocessing.dummy import Pool as ThreadPool
 import time
 
@@ -29,7 +28,9 @@ def mylist (field):
 begin_time = time.time()
 
 for i in range (F1,Fn,through):
+
    start_time = time.time()
+
    Ux = TheFrames[i].fieldOutputs['U'].getScalarField(componentLabel='U1')
    MisesField = TheFrames[i].fieldOutputs['S'].getScalarField(invariant=MISES)
    SDV4 = TheFrames[i].fieldOutputs['SDV4']
@@ -46,16 +47,14 @@ for i in range (F1,Fn,through):
    third_time = time.time()
    print 'Time_for_creation_lists = ', third_time - second_time
 
-   pool = ThreadPool(3)
+   #pool = ThreadPool(3)
+   #AVG = pool.map(numpy.mean, lists)
+   #pool.close()
+   #pool.join()
 
-   AVG = pool.map(numpy.mean, lists)
-
-   pool.close()
-   pool.join()
-
-   aveS = AVG[0] / 1000000
-   aveSDV4 = AVG[1] *100
-   aveSDV5 = AVG[2] *100
+   aveS = numpy.mean(lists[0]) * 100000
+   aveSDV4 = numpy.mean(lists[1]) *100
+   aveSDV5 = numpy.mean(lists[2]) *100
 
    seOutputFile.write(str(Ux.values[pnt].data*20000)+'    ')
    seOutputFile.write(str(aveS)+'    ')
